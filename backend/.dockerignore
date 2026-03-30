@@ -1,0 +1,12 @@
+# Backend .dockerignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+.git
+.env
+.env.*
+*.md
+.python-version

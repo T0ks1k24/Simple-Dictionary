@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lexicon-backend-dev
+    restart: unless-stopped
+    env_file: .env.dev
+    volumes:
+      - ./backend:/app
+      - dev_db:/app/db.sqlite3
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - dev-net
+
+  frontend:
+    image: node:20-alpine
+    container_name: lexicon-frontend-dev
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "npm install && npm start"
+    networks:
+      - dev-net
+
+volumes:
+  dev_db:
+
+networks:
+  dev-net:
+    driver: bridge
